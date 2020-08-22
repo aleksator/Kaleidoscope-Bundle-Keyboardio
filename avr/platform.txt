@@ -18,8 +18,8 @@ compiler.warning_flags.more=-Wall
 compiler.warning_flags.all=-Wall -Wextra
 
 # Default "compiler.path" is correct, change only if you want to override the initial value
-compiler.path={runtime.tools.avr-gcc.path}/bin/
-#compiler.path=/usr/bin/
+#compiler.path={runtime.tools.avr-gcc.path}/bin/
+compiler.path=/usr/bin/
 compiler.c.cmd=avr-gcc
 compiler.c.flags=-c -g -Os {compiler.warning_flags} -std=gnu11 -ffunction-sections -fdata-sections -MMD -Wimplicit-fallthrough=3
 compiler.c.elf.flags={compiler.warning_flags} -Os -Wl,--gc-sections "-Wl,-Map={build.path}/{build.project_name}.elf.map"
@@ -67,9 +67,9 @@ archive_file_path={build.path}/{archive_file}
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
 
 ################################################################################
-## PLEASE NOTE: The way we link our elf binary significantly differs from the 
-##              way that Arduino handles things by default. 
-##              The original linker command has been split up into three 
+## PLEASE NOTE: The way we link our elf binary significantly differs from the
+##              way that Arduino handles things by default.
+##              The original linker command has been split up into three
 ##              steps (recipe.c.combine.pattern, recipe.hooks.linking.postlink.1.pattern
 ##              and recipe.hooks.linking.postlink.2.pattern).
 ##              This is necessary to prevent link errors reporting unresolved symbols
@@ -80,7 +80,7 @@ recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compil
 ##                    removed at the end of a previous build, because the build process
 ##                    terminated early after a failed attempt to link (e.g. because of missing symbols).
 recipe.hooks.linking.prelink.1.pattern={tools.rm_start.cmd} "{build.path}/{build.project_name}_joined.a" {tools.rm_end.cmd}
-##              
+##
 ## CHANGED WRT DEFAULT: Generate a large .a archive to prevent link order issues with garbage collection
 recipe.c.combine.pattern="{compiler.path}/{compiler.ar.cmd}" {compiler.c.elf.flags_join_archives} "{build.path}/{build.project_name}_joined.a" {object_files} "{build.path}/{archive_file}"
 ##
@@ -119,9 +119,9 @@ recipe.preproc.macros="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} {
 # AVR Uploader/Programmers tools
 # ------------------------------
 
-tools.avrdude.path={runtime.tools.avrdude.path}
+tools.avrdude.path=/usr
 tools.avrdude.cmd.path={path}/bin/avrdude
-tools.avrdude.config.path={path}/etc/avrdude.conf
+tools.avrdude.config.path=/etc/avrdude.conf
 
 tools.avrdude.upload.params.verbose=-v
 tools.avrdude.upload.params.quiet=-q -q
@@ -160,9 +160,9 @@ tools.dfu-programmer.upload.pattern=/bin/sh -c '"{cmd.path}" atmega32u4 erase &&
 # This would result in a premature termination of the overall build process that
 # must be prevented.
 #
-# To allow for possibly non-existing files being passed to command 'rm' we force 
+# To allow for possibly non-existing files being passed to command 'rm' we force
 # powershell to ignore the resulting error and pass error value zero
-# back to the build system. 
+# back to the build system.
 #
 # For this to work, the rm-command is split up in two
 # parts (start/end). The second (end) part is only required on Windows.
@@ -189,7 +189,7 @@ tools.ctags.cmd.path={path}/ctags
 tools.ctags.pattern="{cmd.path}" -u --language-force=c++ -f - --c++-kinds=svpf --fields=KSTtzns --line-directives "{source_file}"
 
 # The following recipes enable adding code to specific places
-# of the preprocessed firmware sketch. This is done by pasting 
+# of the preprocessed firmware sketch. This is done by pasting
 # the content of two files
 #   kaleidoscope_internal/sketch_preprocessing/sketch_header.h,
 #   kaleidoscope_internal/sketch_preprocessing/sketch_footer.h
